@@ -1,0 +1,335 @@
+<noinclude>{{LaTeX/Top}}</noinclude>
+
+Convenient and predictable list formatting is one of the many advantages of using LaTeX. Users of WYSIWYG word processors can sometimes be frustrated by the software's attempts to determine when they intend lists to begin and end. As a mark-up language, LaTeX gives more control over the structure and content of lists.
+
+== List structures ==
+
+Lists often appear in documents, especially academic, as their purpose is often to present information in a clear and concise fashion. List structures in LaTeX are simply environments which essentially come in three types:
+* {{LaTeX/Environment|itemize}} for a bullet list 
+* {{LaTeX/Environment|enumerate}} for an enumerated list and
+* {{LaTeX/Environment|description}} for a descriptive list.
+
+All lists follow the basic format:
+
+{{LaTeX/Usage|code=
+\begin{list_type}  
+\item The first item 
+\item The second item 
+\item The third etc \ldots 
+\end{list_type}
+ }}
+
+All three of these types of lists can have multiple paragraphs per item: just type the additional paragraphs in the normal way, with a blank line between each. So long as they are still contained within the enclosing environment, they will automatically be indented to follow underneath their item.
+
+
+Try out the examples below, to see what the lists look like in a
+real document.
+
+{{LaTeX/Example|code=
+\documentclass{article}
+\usepackage{blindtext}
+\begin{document}
+\begin{itemize}
+\item \blindtext
+\item \blindtext
+\end{itemize}
+\begin{enumerate}
+\item \blindtext
+\item \blindtext
+\end{enumerate}
+\begin{description}
+\item [Ant] \blindtext
+\item [Elephant] \blindtext
+\end{description}
+\end{document}
+|render=[[File:WikibookLists.png|thumb|Sample output of lists in
+LaTeX. Itemize, enumerate and description.]]
+ }}
+
+
+LaTeX will happily allow you to insert a list environment into an
+existing one (up to a depth of four, more levels are available
+using packages). Simply begin the appropriate environment at the
+desired point within the current list. Latex will sort out the
+layout and any numbering for you.
+
+{{LaTeX/Example|code=
+\begin{enumerate}
+\item The first item
+\begin{enumerate}
+\item Nested item 1
+\item Nested item 2
+\end{enumerate}
+\item The second item
+\item The third etc \ldots
+\end{enumerate}
+|render=
+[[Image:nested.svg]]
+ }}
+
+== Some special lists ==
+
+Sometimes you feel the need to better align the different list
+items. If you are using a KOMA-script class (or package
+<code>scrextend</code>), the
+<code>labeling</code> environment is handy. It takes a mandatory
+argument that contains the longest of your labels.
+
+{{LaTeX/Example|code=
+\documentclass[twocolumn]{article}
+\usepackage{blindtext}
+\usepackage{scrextend}
+\addtokomafont{labelinglabel}{\sffamily}
+\begin{document}
+\blindtext
+\begin{labeling}{alligator}
+\item [ant] really busy all the time
+\item [chimp] likes bananas
+\item [alligator] very dangerous animal, sharp teeth, long
+muscular tail and a bit of text that is longer than one
+line and shows the alignment of text quite nicely
+\end{labeling}
+\end{document}
+|render=[[File:WikibookListsLabeling.png|500px]]
+}}
+
+
+If you are on tight space limitations and only have short item
+descriptions, you may want to have the list inline. Please note
+that the example also shows how to change the font.
+
+{{LaTeX/Example|code=
+\documentclass[twocolumn]{article}
+\usepackage{blindtext}
+\usepackage[inline]{enumitem}
+\usepackage{xcolor}
+\begin{document}
+\blindtext Coco likes fruit. Her favorites are:
+\begin{enumerate*}[label={\alph*)},font={\color{red!50!black}\bfseries}]
+\item bananas
+\item apples
+\item oranges and
+\item lemons.
+\end{enumerate*}
+\blindtext
+\end{document}
+|render=[[File:WikibooksListsInline.png|500px]]
+}}
+
+
+If you want a horizontal list, package tasks can be handy. In
+combination with a package like exsheets, you can prepare exam
+papers for students.
+
+{{LaTeX/Example|code=
+\documentclass{article}
+\usepackage{blindtext}
+\usepackage{tasks}
+\begin{document}
+Which one of the entries does not fit with the others?
+\begin{tasks}(4)
+\task mercury
+\task iron
+\task lead
+\task zinc
+\end{tasks}
+\end{document}
+|render=[[File:WikibooksListsTask.png]]
+}}
+
+
+== Customizing lists ==
+
+Especially when dealing with lists containing of just a few words
+per item, the standard lists take up too much space and you want
+to customize the appearance. Package {{LaTeX/Package|enumitem}}
+helps you by providing a simple interface.
+
+You can change the appearance of lists globally in the preamble,
+or just for single lists using the optional argument of the
+environment. Have a look at the following example where the list
+on the right is more compact using <code>noitemsep</code>.
+
+{{LaTeX/Example|code=
+\documentclass[twocolumn]{article}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\begin{document}
+\blindtext
+\begin{itemize}
+\item more work
+\item more responsibility
+\item more satisfaction
+\end{itemize}
+\blindtext
+\newpage
+\blindtext
+\begin{itemize}[noitemsep]
+\item more work
+\item more responsibility
+\item more satisfaction
+\end{itemize}
+\blindtext
+\end{document}
+|render=[[File:WikibookListsCompact.png|600px]]
+}}
+
+An example for alignment and the width of the label. 
+{{LaTeX/Example|code=
+\documentclass[twocolumn]{article}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\begin{document}
+\blindtext Coco likes fruit. Her favourites are:
+\begin{description}[align=left]
+\item [Kate] some detail
+\item [Christina]some detail
+\item [Laura]some detail
+\end{description}
+\begin{description}[align=right]
+\item [Kate] some detail
+\item [Christina]some detail
+\item [Laura]some detail
+\end{description}
+\begin{description}[align=right,labelwidth=3cm]
+\item [Kate] some detail
+\item [Christina]some detail
+\item [Laura]some detail
+\end{description}
+\blindtext
+\end{document}
+|render=[[File:WikibookListsCustom.png]]
+}}
+
+The documentation of package enumitem goes into more detail with
+respect to what can be changed and how. 
+<code>labeling</code> and <code>tasks</code> can be changed
+differently, details can be found in the package documentation
+respectively.
+
+
+== Easylist package ==
+The {{LaTeX/Package|easylist}} package allows you to create list using a more convenient syntax and with infinite nested levels.
+It is also very customizable.
+
+Load the package with the control character as optional argument:
+{{LaTeX/Usage|code=
+\usepackage[ampersand]{easylist}
+ }}
+
+The {{LaTeX/Environment|easylist}} environment will default to enumerations.
+{{LaTeX/Usage|code=
+\begin{easylist}
+& Main item~:
+&& Sub item.
+&& Another sub item.
+\end{easylist}
+ }}
+
+It features predefined styles which you can set as optional argument.
+{{LaTeX/Usage|code=
+\begin{easylist}[itemize]
+% ...
+\end{easylist}
+ }}
+
+Available styles:
+* {{LaTeX/Parameter|tractatus}}
+* {{LaTeX/Parameter|checklist}} - All items have empty check boxes next to them
+* {{LaTeX/Parameter|booktoc}} - Approximately the format used by the table of contents of the book class
+* {{LaTeX/Parameter|articletoc}} - Approximately the format used by the table of contents of the article class
+* {{LaTeX/Parameter|enumerate}} - The default
+* {{LaTeX/Parameter|itemize}}
+
+You can customize lists with the {{LaTeX/LaTeX|code=\ListProperties(...)<!---->}} command and revert back the customization with {{LaTeX/LaTeX|code=\newlist{}<!---->}}. Yes, that's parentheses for {{LaTeX/LaTeX|code=\ListProperties<!---->}} parameters.
+
+The {{LaTeX/Parameter|Style}} parameter sets the style of counters and text, the {{LaTeX/Parameter|Style*}} parameter sets the style of counters, and the {{LaTeX/Parameter|Style**}} parameter sets the style of text. The parameter {{LaTeX/Parameter|Numbers}} determines the way that the numbers are displayed and the possible values are {{LaTeX/Parameter|r}} or {{LaTeX/Parameter|R}} (for lower and upper case Roman numerals), {{LaTeX/Parameter|l}} or {{LaTeX/Parameter|L}} (for lower and upper case letters), {{LaTeX/Parameter|a}} (for Arabic numbers, the default), and {{LaTeX/Parameter|z}} (for Zapf's Dingbats).
+
+The {{LaTeX/Parameter|FinalMark}} parameter sets the punctuation of the final counter (Ex: {{LaTeX/LaTeX|code=FinalMark3={)} }}) while {{LaTeX/Parameter|FinalSpace}} sets the amount of space between the item and the item's text. The {{LaTeX/Parameter|Margin}} parameter sets the distance from the left margin (Ex: {{LaTeX/LaTeX|code=FinalSpace2=1cm}}). The {{LaTeX/Parameter|Progressive}} parameter sets the distance from the left margin of all items in proportion to their level.
+
+The {{LaTeX/Parameter|1=Hide = n}} parameter prevents the first {{LaTeX/Parameter|n}} counters from appearing in all levels. If there is a number after a parameter (Ex: {{LaTeX/Parameter|Style3*}}) then this numbers indicates the level that it will affect (Ex: {{LaTeX/LaTeX|code=Style3=\color{red} }}).
+
+Example of custom enumerate:
+{{LaTeX/Usage|code=
+\begin{easylist}[enumerate]
+\ListProperties(Style2*=,Numbers=a,Numbers1=R,FinalMark={)})
+& Main item~:
+&& Sub item.
+&& Another sub item.
+\end{easylist}
+ }}
+
+Note that we put the {{LaTeX/Parameter|FinalMark}} argument between {{LaTeX/LaTeX|code={}<!---->}} to avoid LaTeX understanding it as the end of the properties list.
+Now we change the default properties to print a custom itemize:
+
+{{LaTeX/Example|code=
+\usepackage{amssymb}
+\ListProperties(Hide=100, Hang=true, Progressive=3ex, Style*=-- ,
+Style2*=$\bullet$ ,Style3*=$\circ$ ,Style4*=\tiny$\blacksquare$ )
+% ...
+
+\begin{easylist}
+& Blah
+& Blah
+&& Blah
+&&& Blah
+&&&& Blah
+&&&&& Blah
+\end{easylist}
+|render=
+– Blah<br/>
+&nbsp; <math>\bullet</math> Blah<br/>
+&nbsp;&nbsp; <math>\circ</math> Blah<br/>
+&nbsp;&nbsp;&nbsp; <math>\blacksquare</math> Blah<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; – Blah
+ }}
+
+Spaces in {{LaTeX/Parameter|Style}} parameters are important. The {{LaTeX/Parameter|Style*}} parameter acts as a default value and {{LaTeX/Environment|easylist}} will use a medium dash for level 1, 5 and onward. 
+
+You can also define custom styles using LaTeX macros:
+{{LaTeX/Usage|code=
+\newcommand\myitemize{\ListProperties(Hide=100, Hang=true, Progressive=3ex, Style*=$\star$ )}
+\newcommand\myenumerate{\ListProperties(Space=2\baselineskip)}
+
+% ...
+\begin{easylist} \myitemize
+& Blah
+\end{easylist}
+ }}
+
+Important note: {{LaTeX/Package|easylist}} has some drawbacks.
+First if you need to put an easylist inside an environment using the same control character as the one specified for easylist, you may get an error.
+To circumvent it, use the following commands provided by easylist:
+
+{{LaTeX/Usage|code=
+\Activate
+\begin{easylist}
+& ...
+\end{easylist}
+\Deactivate
+ }}
+
+Besides using {{LaTeX/Environment|easylist}} along with figures may cause some trouble to the layout and the indentation.
+LaTeX lists do not have this problem.
+
+To use easylist with Beamer, each frame that uses easylist must be marked as fragile:
+
+{{LaTeX/Usage|code=
+\begin{frame}[fragile]
+...
+\begin{easylist}[itemize]
+...
+\end{easylist}
+...
+\end{frame}
+ }}
+
+== Notes and references ==
+{{reflist}}
+
+<noinclude>
+{{LaTeX/Bottom|Fonts|Special Characters}}
+</noinclude>
+
+[[sr:LaTeX/Структура листи]]
+

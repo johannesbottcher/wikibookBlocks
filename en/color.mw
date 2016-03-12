@@ -1,0 +1,95 @@
+<noinclude>{{LaTeX/Top}}</noinclude>
+Adding colors to your text is supported by the [http://www.ctan.org/pkg/color <tt>color</tt>] package, which is further extended by the  [http://www.ctan.org/pkg/xcolor <tt>xcolor</tt>] package. 
+
+
+==Package Options ==
+
+To keep it simple, only package <code>xcolor</code> is addressed. Following are the most common options, which should be given as the optional argument when loading the documentclass.
+
+<code>dvipsnames</code>, <code>svgnames</code> and <code>x11names</code> load a set of predefined colors. Have a look at the xcolor manual (section 4 Colors by names) to see a full list including examples of which colors are available.
+
+Two other important options are <code>hyperref</code> (support in terms of color expressions by defining additional keys) and <code>table</code> (loading the <code>colortbl</code> package).
+
+==Entering colored text==
+
+<syntaxhighlight lang="latex">
+\documentclass[x11names]{article}
+\usepackage{tikz}
+\newcommand{\keyword}[1]{\textcolor{red!60!black}{#1}}
+\newenvironment{important}{\par\color{black!80!green}\itshape}{\par}
+\begin{document}
+A simple macro defined and no \keyword{keyword} can hide.
+
+\begin{important}
+	some text \blindtext
+
+	more \blindtext
+\end{important}
+
+The text after the environment looks normal again.
+
+\tikz \draw [fill=Firebrick2] (0,0) circle (1cm);
+
+Try the example out yourself.
+\end{document}
+</syntaxhighlight>
+
+Defining own macros and/or environments is not mandatory but help to keep the document consistent. You can use the color commands raw. <code>\textcolor</code> is well suited for single words or short passages of text. If you need multiple paragraps, better use <code>\color</code>.
+
+
+
+
+== Boxes with a colored background ==
+
+Better not do anything by hand. Packages like [http://ctan.org/pkg/tcolorbox tcolorbox] or [http://ctan.org/pkg/mdframed mdframed] can ease your work to achieve your goal. 
+
+==Defining new colors==
+
+If you are not satisfied with the predefined colors, you can define your own.
+
+<syntaxhighlight lang="latex">
+\documentclass{article}
+\usepackage{xcolor}
+\definecolor{landanimal}{rgb}{.545,.1,.1}
+\colorlet{ocean}{blue!60!black}
+\newcommand{\earth}[1]{\textcolor{landanimal}{#1}}
+\newcommand{\water}[1]{\textcolor{ocean}{#1}}
+\begin{document}
+Many different animals live in the zoo, the \earth{Wombat} is
+not alone. Some have even spotted a \water{dolphin}.
+\end{document}
+</syntaxhighlight>
+
+This can be done by mixing predefined colors or by defining the values by hand. Package <code>xcolor</code> supports different color schemes. A look into the manual will lead to fast results. 
+
+===Creating/Capturing colors===
+
+You may want to use colors that appear on another document, web pages, pictures, etc.
+Alternatively, you may want to play around with rgb values to create your own custom colors.
+
+Image processing suites like the free [http://www.gimp.org/downloads/ GIMP] suite for Linux/Windows/Mac offer color picker facilities to capture any color on your screen or synthesize colors directly from their respective rgb / hsv / hexadecimal values. 
+
+Smaller, free utilities also exist:
+* Linux/BSD: The [http://gcolor2.sourceforge.net/ gcolor2] tool (usually also available in repositories)
+* Microsoft Windows: The open-source [http://colorselector.sourceforge.net/ Color Selector] tool.
+* Apple Macs: [http://wafflesoftware.net/hexpicker/ Hex Color Picker] for creating custom colors and the built-in [http://www.apple.com/uk/osx/apps/all.html#colormeter DigitalColor Meter] for capturing colors on screen.
+* Online utilities: See here for a [[w:Color_tool|Wikipedia article with several external links]]
+
+=== Spot colors ===
+
+Spot colors are customary in printing. They usually refer to pre-mixed inks based on a swatchbook (like Pantone, TruMatch or Toyo). The package {{LaTeX/Package|colorspace}} extends xcolor to provide real spot colors. They are defined with, say:
+
+{{LaTeX/Usage|code=
+\definespotcolor{mygreen}{PANTONE 7716 C}{.83, 0, .40, .11}
+}}
+
+== Sources ==
+* [http://mirror.ctan.org/macros/latex/contrib/xcolor/xcolor.pdf The xcolor manual]
+* [http://mirrors.ctan.org/macros/latex/required/graphics/grfguide.pdf The color package documentation ]
+
+<noinclude>
+{{LaTeX/Bottom|Paragraph Formatting|Fonts}}
+
+[[sr:LaTeX/Боје]]
+</noinclude>
+

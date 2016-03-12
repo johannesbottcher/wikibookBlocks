@@ -1,0 +1,102 @@
+<noinclude>{{LaTeX/Top}}</noinclude>
+
+A reference list is nothing more than a, well, list. A list with anchors, or keys, to properly refer to the different list items. The list environment is called <code>thebibliography</code>, it takes one mandatory argument. Every item in the list starts with <code>\bibitem{bibkey}</code>.
+
+Citing an entry from your references works similar to the label and ref mechanism. The label is the key given to the <code>bibitem</code>, referencing is done by <code>\cite</code>.
+
+{{LaTeX/Example|code=
+\documentclass{article}
+\usepackage{url}
+\begin{document}
+I doubt that there is any useful information here~\cite{wikibook}.
+
+All we know is limited, apart from knowing the answer we all know. Or do we? Wombat and Koala have discovered some interesting things~\cite{wombat2016}.
+
+Some people are too nosy. What can happen to them is described by Laura Lion~\cite[p.~9]{lion2010}.
+
+\begin{thebibliography}{1}
+	\bibitem{wombat2016}
+		Walther Wombat and Klaus Koala,
+		``The true meaning of 42'' in: Journal of modern skepticism;
+		2016
+	\bibitem{lion2010}
+		Laura Lion, Gabrielle Giraffe and Carl Capybara,
+		``The dangers of asking the wrong question'', publishing house;
+		2010
+	\bibitem{wikibook}
+		manually managing references, 
+		\url{https://en.wikibooks.org/wiki/LaTeX/Manually_Managing_References}
+		2016
+\end{thebibliography}
+\end{document}|
+render=[[File:ManualRefA.png|500px]]
+}}
+
+<code>cite</code> returns the number of our list entry in the list in brackets. An optional argument can be given to add some text within the brackets.
+
+As one can see, there is no sorting. Sorting is left to the document author.
+
+Style and punctuation has to be consistent in your bibliography. If you have trouble remembering to put the title into quotes, define a helper command and use it. There is another inconsistency in the image above. Can you spot it? 
+
+{{LaTeX/Example|code=
+\documentclass{article}
+\usepackage{url}
+\newcommand{\bibTitle}[1]{``#1''}
+\begin{document}
+I doubt that there is any useful information here~\cite{wikibook}.
+
+All we know is limited, apart from knowing the answer we all know. Or do we? Wombat and Koala have discovered some interesting things~\cite{wombat2016}.
+
+Some people are too nosy. What can happen to them is described by Laura Lion~\cite[p.~9]{lion2010}.
+
+\begin{thebibliography}{1}
+	\bibitem{wikibook}
+		\bibTitle{Manually Managing References}, 
+		\url{https://en.wikibooks.org/wiki/LaTeX/Manually_Managing_References};
+		2016
+	\bibitem{wombat2016}
+		Walther Wombat and Klaus Koala,
+		\bibTitle{The true meaning of 42} in: Journal of modern skepticism;
+		2016
+	\bibitem{lion2010}
+		Laura Lion, Gabrielle Giraffe and Carl Capybara,
+		\bibTitle{The dangers of asking the wrong question}, publishing house;
+		2010
+\end{thebibliography}
+\end{document}|
+render=[[File:ManualRefB.png|500 px]]
+}}
+
+You may ask yourself what the mandatory argument of the environment is doing. You can define your own label for any entry in your list. Use your widest entry inside the argument. Using that optional argument, you can create an author-year style.
+
+{{LaTeX/Example|code=
+\documentclass{article}
+\usepackage{url}
+\newcommand{\bibTitle}[1]{``#1''}
+\begin{document}
+I doubt that there is any useful information here~\cite{wikibook}.
+
+All we know is limited, apart from knowing the answer we all know. Or do we? Wombat and Koala have discovered some interesting things~\cite{wombat2016}.
+
+Some people are too nosy. What can happen to them is described by Laura Lion~\cite[p.~9]{lion2010}.
+
+\begin{thebibliography}{Wombat, 2016}
+	\bibitem[Wikibook]{wikibook}
+		\bibTitle{Manually Managing References}, 
+		\url{https://en.wikibooks.org/wiki/LaTeX/Manually_Managing_References};
+		2016
+	\bibitem[Wombat, 2016]{wombat2016}
+		Walther Wombat and Klaus Koala,
+		\bibTitle{The true meaning of 42} in: Journal of modern skepticism;
+		2016
+	\bibitem{lion2010}
+		Laura Lion, Gabrielle Giraffe and Carl Capybara,
+		\bibTitle{The dangers of asking the wrong question}, publishing house;
+		2010
+\end{thebibliography}
+\end{document}|
+render=[[File:ManualRefC.png|500px]]
+}}
+
+
+Keeping track of all the details and checking for consistency will cost a lot of time.
