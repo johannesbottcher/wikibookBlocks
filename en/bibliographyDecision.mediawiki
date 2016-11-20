@@ -1,0 +1,22 @@
+if Is someone guiding you to go a certain way
+	do so
+else 
+	if do you want to do it manually
+		do it by hand
+	else 
+		bilatex or classical bibtex with natbib
+	fi
+fi
+
+introduction
+decision tree
+link to manual bibliographies (done)
+creating a database
+biblatex (in the working)
+bibtex (rewrite needed)
+
+
+For any academic/research writing, incorporating references into
+a document is an important task. Fortunately, LaTeX has a variety
+of features that make dealing with references much simpler,
+including built-in support for citing references.

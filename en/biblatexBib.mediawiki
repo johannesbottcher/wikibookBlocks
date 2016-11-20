@@ -1,0 +1,311 @@
+Generating Bibliographies with biblatex and biber
+
+This will only be a short overview of the main and most often
+used features. More detailed information can be found in the
+package documentation.
+
+
+=== The database ===
+
+Creating a bibliography using biblatex and biber means storing
+''all'' of your available bibliographic information in a simple
+text-based database. The name should be as unique as possible,
+for example <code>lauraPhd2016.bib</code>. This is helpful when
+transferring files with your advisor, students or colleagues.
+biber is used to deal with the database.
+
+A sample database file could look like this:
+<syntaxhighlight lang="latex">
+@article{wombat2016,
+	author   = {Walther Wombat and Klaus Koala},
+	title    = {The true meaning of 42},
+	journal  = {Journal of modern skepticism},
+	date     = {2016},
+	keywords = {trusted},
+}
+@book{lion2010,
+	author       = {Laura Lion and  Gabrielle Giraffe and Carl Capybara},
+	title        = {The dangers of asking the wrong question},
+	publisher    = {publishing house},
+	date         = {2010},
+	keywords     = {trusted},
+}
+@online{wikibook,
+	title        = {Generating Bibliographies with biblatex and biber},
+	organization = {Wikibooks},
+	date         = {2016},
+	urldate      = {2016-03-07},
+	url          = {https://en.wikibooks.org/wiki/LaTeX/Generating_Bibliographies_with_biblatex_and_biber},
+	keywords     = {untrusted},
+}
+</syntaxhighlight>
+
+Every entry in the database starts with an <code>@</code>-sign
+followed by the entry type. More types are available, the package
+documentation lists all of them. The bibliographic information
+for each entry are stored in a pair of braces, beginning with a
+unique keyword for that entry (bibkey). Least complicated way of
+presenting the data is every field type in a new line, the
+content in curly braces, followed by a comma. The order in which
+you give the information is not important.
+
+Please have a close look at the authors, every individual author
+is separated by the keyword <code>and</code>. All dates are
+written in YYYY-MM-DD, or just the year if the other information
+are not available. The file <code>biblatex-examples.bib</code>
+which should have been installed with the package contains some
+sample entries.
+
+=== Setting up biber ===
+
+Biber is the name of the helper program that sorts the entries
+and provides all the relevant information to package biblatex. If
+you are not comfortable using the command line (aka the
+terminal), you should set up your editor to do it for you.
+[http://tex.stackexchange.com/questions/154751/biblatex-with-biber-configuring-my-editor-to-avoid-undefined-citations|Setting
+up my editor to use biber] shows how to do it for the different
+editors.
+
+
+=== A simple example ===
+{{LaTeX/Example|code=
+\documentclass{article}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{lauraPhd2016.bib}
+\begin{document}
+I doubt that there is any useful information here~\cite{wikibook}.
+
+All we know is limited, apart from knowing the answer we all know. Or do we? Wombat and Koala have discovered some interesting things~\cite{wombat2016}.
+
+Some people are too nosy. What can happen to them is described by Laura Lion~\cite[9]{lion2010}.
+
+\printbibliography
+\end{document}|
+}}
+
+Now how does it actually work? Package biblatex is loaded with
+the option <code>backend=biber</code> followed by adding your
+database file to the list of bibliographic files using
+<code>\addbibresource</code>. Please note that the file extension
+is mandatory and that this is happening in the preamble of the
+document. 
+
+Within the document you can cite one of your database entries
+using <code>\cite{bibkey}</code>. Your database can contain
+hundreds of entries, but only cited references will occur in the
+final list. You can use <code>\nocite{<bibkey>}</code> to add
+uncited entries to the list. If you want to add ''all'' entries
+from the database use <code>\nocite{*}</code>.
+
+Finally, the list of your references is printed with
+<code>\printbibliography</code>. 
+
+Running LaTeX (no matter if <code>latex</code>,
+<code>pdflatex</code> etc.) on the main document  will result in
+<code>undefined references</code>, the following screenshot, no
+bibliography and instead of proper citations, just the bibkey
+printed in bold.  
+
+[[iblatexMissingBiber]]
+
+In order to really get a bibliography and the citations, and not
+just the infamous <code>There were undefined reference</code>
+warning, you have to run biber after latex to extract the
+relevant data from the database. After setting up biber as
+described in [[LINK ME LINK ME]] you should be able to do it by
+pressing one button while working on your document. To
+incorporate the bibliography information into your document,
+LaTeX then has to process the data biber has generated before.
+To sum it up, if you have a file
+<code>lauraPhd2016Main.tex</code> you (or your editor) will have to
+do:
+
+* latex lauraPhdd2016Main
+* biber lauraPhdd2016Main
+* latex lauraPhdd2016Main
+
+Everytime your database is updated, remember to process the
+database by calling biber.
+
+The full result can be seen in the picture below. Please note
+that package biblatex adds some small little details. Can you see
+things that are printed but have not been defined?
+
+[[biblatexRefA]]
+
+== Reference  Styles ==
+
+Different reference styles are in use within the different
+disciplines of science. Very broadly speaking, you can divide
+into a numerical referencing sytem (Vancouver) or an author date
+referencing system (Harvard). 
+
+
+%[http://ctan.org/topic/biblatex CTAN]. 
+%Package biblatex provides
+%different citation commands that generate different output
+%(in-text citation, footnotes and more). A few examples are given
+%below, the package documentation contains and explains the use of
+%the whole set. 
+
+
+=== Numerical Referencing ===
+
+Numerical referencing is the default style. Numbers within
+brackets are used in text and in the bibliography. Using
+<code>\autocite</code> makes it easy to change the style into
+footnotes. <code>sorting=none</code> gives a bibliography that is
+sorted chronologically, i.e. the numbers increase to the end of
+the document.
+
+{{LaTeX/Usage|code=
+\documentclass{article}
+\usepackage{xcolor}
+\pagecolor{yellow!20!white}
+\usepackage[backend=biber,style=numeric,autocite=plain,sorting=none]{biblatex}
+\addbibresource{lauraPhd2016.bib}
+\begin{document}
+I doubt that there is any useful information here.~\cite{wikibook}
+
+All we know is limited, apart from knowing the answer we all
+know. Or do we? Wombat and Koala have discovered some interesting
+things.~\autocite[compare][80]{wombat2016}
+
+What can happen to nosy people is described by \textcite[9]{lion2010}.
+\printbibliography
+\end{document}|
+rendering=[[biblatexNumericRegular]]
+}}
+
+Using <code>autocite=footnote</code> gives a diffferent output.
+Can you spot all the differences? 
+
+
+[[biblatexNumericFootnote]]
+
+=== Author Date Referencing ===
+
+If you want an author-date referencing style, you can use
+<code>style=authoryear</code> when loading biblatex. The option
+<code>autocite</code> with the option <code>inline</code> puts
+parenthesis around the cite genererated with
+<code>autocite</code> (which is similar to using
+<code>\parencite</code>. In some cases, <code>\textcite</code>
+may come in handy when the citation is the subject and part of
+the sentence flow. 
+
+{{LaTeX/Usage|code=
+\documentclass{article}
+\usepackage[backend=biber,style=authoryear,autocite=inline]{biblatex}
+\addbibresource{lauraPhd2016.bib}
+\begin{document}
+I doubt that there is any useful information here~\cite{wikibook}.
+
+All we know is limited, apart from knowing the answer we all know. Or do we?~\cite{wombat2016}
+
+Some people are too nosy. What can happen to them is described by Laura Lion~\autocite[9]{lion2010}.
+
+Some people are too nosy. What can happen to them is described by \textcite[9]{lion2010}.
+
+\printbibliography
+\end{document}|
+render=[[add something here]]
+}}
+
+
+=== APA Citing ===
+
+The American Psychological Association (APA) defines a very
+strict author year style. You can access it using
+<code>style=apa</code> and additionally defining the language
+mapping. 
+
+{{LaTeX/Usage|code=
+\usepackage[backend=biber,style=apa,autocite=inline]{biblatex}
+\DeclareLanguageMapping{english}{english-apa}
+\addbibresource{lauraPhd2016.bib}|
+render=[[biblatexApa|500px]]
+}}
+
+Compare the output with the normal author year style. How many
+changes can you spot? 
+
+
+== Separate Bibliographies by Entry Type ==
+
+Suppose you want to have a separate bibliography for all the
+online resources you are citing. No problem using the optional
+argument of <code>\printbibliography</code>. You can also change
+the title (and other stuff).
+{{LaTeX/Usage|code=
+\documentclass{article}
+\usepackage[backend=biber,defernumbers=true]{biblatex}
+\addbibresource{biblatex-examples.bib}
+\begin{document}
+\nocite{westfahl:space,aristotle:physics,ctan,baez/online,markey,sigfridsson}
+\printbibliography[type=online,title={All my online references}]
+\printbibliography[nottype=online,title={All my non-online references}]
+\end{document}|
+render=[[get me an image here]]
+}}
+
+== Splitting into different topics ==
+
+You can split your bibliography into differet topics, in trusted
+and untrusted sources, or in primary and secondary  sources. The
+way to tell biblatex what is what, is by adding a
+<code>keywords</code> tag to the entries of the database.
+
+<syntaxhighlight lang="latex">
+@book{lion2010,
+	author       = {Laura Lion and  Gabrielle Giraffe and Carl Capybara},
+	title        = {The dangers of asking the wrong question},
+	publisher    = {publishing house},
+	date         = {2010},
+	keywords     = {trusted},
+}
+</syntaxhighlight>
+
+{{LaTeX/Usage|code=
+\documentclass{article}
+\usepackage[backend=biber,style=authoryear,refsection=section]{biblatex}
+\addbibresource{lauraPhd2016.bib}
+\begin{document}
+\cites[see also][12]{wombat2016}[and][45]{lion2010}
+\nocite{wikibook}
+\printbibliography[keyword={trusted},title={All the trusted sources}]
+\printbibliography[keyword={untrusted},title={All the untrusted sources}]
+\end{document}|
+render=[[biblatexMultiTopic]]
+}}
+
+Note, that the entryfield in the dataase is called
+<code>keywords</code> (plural) because you can have more than oe
+keyword (separated by commas). When calling the
+<code>\printbibliography</code> command, you have to use the
+singular. biblatex has a powerful system of filtering data, more
+can e found in the manual.
+
+== Bibliographies per Section or Chapter ==
+
+Some people have the need for a reference list at the end of each
+chapter or section. This can be done using
+<code>refsection</code>.
+
+{{LaTeX/Usage|code=
+\documentclass{article}
+\usepackage[backend=biber,defernumbers=true,refsection=section]{biblatex}
+\addbibresource{biblatex-examples.bib}
+\begin{document}
+\section{Aster}
+\cite{ctan,sigfridsson} and some text
+\printbibliography[heading=subbibliography]
+\section{Begonia}
+\cite{aristotle:physics,markey}
+\printbibliography[heading=subbibliography]
+\section{Cichorium}
+\cite{westfahl:space,baez/online}
+\printbibliography[heading=subbibliography]
+\end{document}|
+render=[[biblatexMultiSection]]
+}}
